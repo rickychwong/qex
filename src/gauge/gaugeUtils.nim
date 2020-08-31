@@ -83,12 +83,26 @@ proc saveGauge*[T](g:openArray[T]; fn:string; prec="";
   if wr.status!=0: return wr.status
   return 0
 
-proc setBC*(g: openArray[Field]) =
+proc setBC*(g: openArray[Field], bc = @[1,1,1,-1]) =
+  let gx = g[0]
+  let gy = g[1]
+  let gz = g[2]
   let gt = g[3]
   tfor i, 0..<gt.l.nSites:
     #let e = i div gt.l.nSitesInner
-    if gt.l.coords[3][i] == gt.l.physGeom[3]-1:
-      gt{i} *= -1
+    
+    if bc[0] == -1 :
+      if gx.l.coords[0][i] == gx.l.physGeom[0]-1:
+        gx{i} *= -1
+    if bc[1] == -1 :
+      if gy.l.coords[1][i] == gy.l.physGeom[1]-1:
+        gy{i} *= -1
+    if bc[2] == -1 :
+      if gz.l.coords[2][i] == gz.l.physGeom[2]-1:
+        gz{i} *= -1
+    if bc[3] == -1 :
+      if gt.l.coords[3][i] == gt.l.physGeom[3]-1:
+        gt{i} *= -1
       #echoAll isMatrix(gt{i})
       #echoAll i, " ", gt[e][0,0]
 

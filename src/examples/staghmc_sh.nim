@@ -97,6 +97,7 @@ letParam:
   gintalg:IntProc = "4MN5F2GP"
   gsteps = 4
   mass = @[0.1]  # mass for each staggered species
+  bc = @[1,1,1,-1]
   hmasses0 = @[0.2,0.4]  # Hasenbusch masses for mass[0]
   hmasses1 = if mass.len>1: hmasses0 else: @[]  # Hasenbusch masses for mass[1]
   hmasses2 = if mass.len>2: hmasses0 else: @[]  # Hasenbusch masses for mass[2]
@@ -305,7 +306,7 @@ proc smearRephase(g: any, sg: any):auto =
   let smearedForce = coef.smearGetForce(g, sg, info)
   toc("smear")
   threads:
-    sg.setBC
+    sg.setBC(bc)
     threadBarrier()
     sg.stagPhase
   toc("BC & Phase")
@@ -317,7 +318,7 @@ proc smearRephaseDiscardForce(g: any, sg: any) =
   qexGC "smear done"
   toc("smear w/o force")
   threads:
-    sg.setBC
+    sg.setBC(bc)
     threadBarrier()
     sg.stagPhase
   toc("BC & Phase")
@@ -393,7 +394,7 @@ proc smearedOneLinkForce(f: any, smearedForce: proc, g:any) =
   # Reverse accumulation of the smearing derivatives
   # 1. correcting phase
   threads:
-    f.setBC
+    f.setBC(bc)
     threadBarrier()
     f.stagPhase
     threadBarrier()
