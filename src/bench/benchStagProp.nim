@@ -11,8 +11,10 @@ import rng
 qexInit()
 #var defaultLat = [4,4,4,4]
 #var defaultLat = [8,8,8,8]
-var defaultLat = @[8,8,8,8]
+#var defaultLat = @[8,8,8,8]
+var defaultLat = @[128,128,128,196]
 #var defaultLat = @[12,12,12,12]
+#var defaultLat = @[48,48,48,48]
 defaultSetup()
 var v1 = lo.ColorVector()
 var v2 = lo.ColorVector()
@@ -47,6 +49,7 @@ threads:
 #echo v2
 var sp = initSolverParams()
 sp.maxits = intParam("maxits",int(1e9/lo.nSitesOuter.float))
+sp.verbosity = intParam("verb", 2)
 s.solve(v2, v1, mass, sp)
 resetTimers()
 s.solve(v2, v1, mass, sp)
